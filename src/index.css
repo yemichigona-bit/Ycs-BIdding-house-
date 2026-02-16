@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Required for shadcn/ui */
+@layer base {
+  :root {
+    --border: 214.3 31.8% 91.4%;
+  }
+}
+
+/* Define the missing Tailwind utility */
+@layer utilities {
+  .border-border {
+    border-color: hsl(var(--border));
+  }
+}
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  background-color: black;
+  overflow-x: hidden;
+}
