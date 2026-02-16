@@ -33,7 +33,7 @@ export default function Waitlist() {
 
         {submitted ? (
           <p className="text-green-400 font-medium">
-            You’re on the list. you'll let you know when its time.
+            You’re on the list. you'll know when its time.
           </p>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
