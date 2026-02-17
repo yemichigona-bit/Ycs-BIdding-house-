@@ -90,7 +90,7 @@ export default function Waitlist() {
 
         {/* Footer */}
         <div className="text-center mt-6 text-xs text-white/40">
-          © {new Date().getFullYear()} YC’s Finest
+          © {new Date().getFullYear()} YC_HWK
         </div>
       </div>
     </div>
