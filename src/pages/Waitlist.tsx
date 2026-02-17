@@ -2,63 +2,96 @@ import { useState } from "react";
 
 export default function Waitlist() {
   const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
 
-  async function handleSubmit(e: React.FormEvent) {
+  const FORMSPREE_ENDPOINT = "https://formspree.io/f/xwvnblla";
+
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!email.trim()) return;
 
-    await fetch("https://formspree.io/f/xwvnblla", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({ email }),
-    });
+    try {
+      setStatus("sending");
 
-    setSubmitted(true);
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!res.ok) throw new Error("Failed");
+
+      setStatus("success");
+      setEmail("");
+    } catch {
+      setStatus("error");
+    }
   }
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center px-6 text-white">
-      <div className="text-center max-w-md w-full">
-
-        <h1 className="text-4xl font-bold mb-4">YC's hidden vault </h1>
-
-        <p className="text-gray-400 mb-8">
-          <Soon Unlocked.  
-          <br />
-          "Dont Lack".
-        </p>
-
-        {submitted ? (
-          <p className="text-green-400 font-medium">
-            You’re on the list. you'll know when its time.
+    <div className="min-h-screen bg-black text-white flex items-center justify-center px-6">
+      <div className="w-full max-w-md">
+        {/* Header */}
+        <div className="text-center mb-10">
+          <h1 className="text-3xl font-semibold tracking-tight">
+  YC's Hidden Vault
+</h1>
+          <p className="mt-3 text-sm text-white/70">
+            For those who know. Invite-only drops.
           </p>
-        ) : (
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <p className="mt-2 text-xs text-white/50">
+            Coming soon,Dont Lack.
+          </p>
+        </div>
+
+        {/* Card */}
+        <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+          <form onSubmit={onSubmit} className="space-y-3">
+            <label className="block text-sm text-white/80">
+              Email
+            </label>
+
             <input
               type="email"
-              required
-              placeholder="Email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="px-4 py-3 rounded bg-gray-900 border border-gray-700 text-white focus:outline-none"
+              placeholder="you@email.com"
+              className="w-full rounded-xl bg-black/40 border border-white/10 px-4 py-3 text-white placeholder:text-white/40 outline-none focus:border-white/30"
             />
 
             <button
               type="submit"
-              className="bg-white text-black py-3 rounded font-semibold hover:bg-gray-200 transition"
+              disabled={status === "sending"}
+              className="w-full rounded-xl bg-white text-black font-medium py-3 hover:bg-white/90 disabled:opacity-60"
             >
-              Request Early Access
+              {status === "sending" ? "Locking you in..." : "Join the waitlist"}
             </button>
+
+            {status === "success" && (
+              <p className="text-sm text-green-300">
+                Locked in. We’ll let you know when it’s time.
+              </p>
+            )}
+
+            {status === "error" && (
+              <p className="text-sm text-red-300">
+                Something went wrong. Try again.
+              </p>
+            )}
           </form>
-        )}
 
-        <p className="text-xs text-gray-600 mt-6">
-          Those who know, Wait.
-        </p>
+          <div className="mt-4 text-xs text-white/50">
+            No spam. Invite-only drops.
+          </div>
+        </div>
 
+        {/* Footer */}
+        <div className="text-center mt-6 text-xs text-white/40">
+          © {new Date().getFullYear()} YC’s Finest
+        </div>
       </div>
     </div>
   );
