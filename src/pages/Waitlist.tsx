@@ -23,12 +23,12 @@ export default function Waitlist() {
     <div className="min-h-screen bg-black flex items-center justify-center px-6 text-white">
       <div className="text-center max-w-md w-full">
 
-        <h1 className="text-4xl font-bold mb-4">YC's Bidding Room</h1>
+        <h1 className="text-4xl font-bold mb-4">YC's hidden vault </h1>
 
         <p className="text-gray-400 mb-8">
-          Access Pending.  
+          <Soon Unlocked.  
           <br />
-          Dont Lack.
+          "Dont Lack".
         </p>
 
         {submitted ? (
